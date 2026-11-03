@@ -31,3 +31,28 @@ function updateChecklist() {
   }
 }
 checks.forEach(check => check.addEventListener('change', updateChecklist));
+
+// Three-question digital citizenship quiz
+const quizButton = document.querySelector('#quiz-submit');
+quizButton?.addEventListener('click', () => {
+  const questions = [...document.querySelectorAll('.quiz-question')];
+  let answered = 0;
+  let score = 0;
+  questions.forEach((question, index) => {
+    const selected = question.querySelector('input:checked');
+    const feedback = question.querySelector('.quiz-feedback');
+    if (!selected) {
+      feedback.textContent = 'Bạn chưa chọn đáp án.';
+      return;
+    }
+    answered++;
+    const correct = selected.value === question.dataset.answer;
+    if (correct) score++;
+    feedback.textContent = correct ? '✓ Chính xác!' : 'Chưa đúng. Hãy đọc lại tình huống và thử ghi nhớ cách xử lý an toàn.';
+  });
+  const result = document.querySelector('#quiz-result');
+  if (result) {
+    if (answered < questions.length) result.textContent = `Bạn đã trả lời ${answered}/3 câu. Hãy hoàn thành các câu còn lại nhé.`;
+    else result.textContent = `Kết quả: ${score}/3 câu đúng. ${score === 3 ? 'Rất tốt! Hãy duy trì những thói quen số có trách nhiệm.' : 'Hãy xem lại phần giải thích và thử lại để ghi nhớ kiến thức.'}`;
+  }
+});
